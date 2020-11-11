@@ -1,0 +1,65 @@
+[root@postgres vagrant]# yum install epel-release -y
+[root@postgres vagrant]# yum --enablerepo=centos-sclo-rh -y install rh-postgresql96-postgresql-server
+[root@postgres vagrant]# yum -y install yum-plugin-priorities
+[root@postgres vagrant]# sed -i -e "s/\]$/\]\npriority=1/g" /etc/yum.repos.d/CentOS-Base.repo
+[root@postgres vagrant]# sed -i -e "s/\]$/\]\npriority=5/g" /etc/yum.repos.d/epel.repo
+[root@postgres vagrant]# sed -i -e "s/enabled=1/enabled=0/g" /etc/yum.repos.d/epel.repo
+[root@postgres vagrant]# yum -y install centos-release-scl-rh centos-release-scl
+[root@postgres vagrant]# yum --enablerepo=centos-sclo-rh -y install rh-postgresql96-postgresql-server
+[root@postgres vagrant]# scl enable rh-postgresql96 bash
+[root@postgres vagrant]# postgres -V
+[root@postgres vagrant]# which postgres
+[root@postgres vagrant]# vi /etc/profile.d/rh-postgresql96.sh
+# create new
+#!/bin/bash
+
+source /opt/rh/rh-postgresql96/enable
+export X_SCLS="`scl enable rh-postgresql96 'echo $X_SCLS'`"
+[root@postgres vagrant]# postgresql-setup --initdb --unit rh-postgresql96-postgresql
+ * Initializing database in '/var/opt/rh/rh-postgresql96/lib/pgsql/data'
+ * Initialized, logs are in /var/lib/pgsql/initdb_rh-postgresql96-postgresql.log
+[root@postgres vagrant]# vi /var/opt/rh/rh-postgresql96/lib/pgsql/data/postgresql.conf
+# line 59: uncomment and change if allow accesses from remote hosts
+listen_addresses = '*'
+# line 433: uncomment and change if change log format
+log_line_prefix = '%t %u %d '
+[root@postgres vagrant]# systemctl start rh-postgresql96-postgresql
+[root@postgres vagrant]# systemctl enable rh-postgresql96-postgresql
+[root@postgres vagrant]# systemctl start firewalld
+[root@postgres vagrant]# systemctl enable firewalld
+[root@postgres vagrant]# firewall-cmd --add-service=postgresql --permanent
+success
+[root@postgres vagrant]# firewall-cmd --reload
+success
+[root@postgres vagrant]# su - postgres
+-bash-4.2$ psql -c "alter user postgres with password 'P@ssw0rd'"
+ALTER ROLE
+-bash-4.2$ createuser cent
+-bash-4.2$ createdb testdb -O cent
+-bash-4.2$ psql -l
+                                  List of databases
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+-----------+----------+----------+-------------+-------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ template0 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ testdb0   | cent     | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+(4 rows)
+
+-bash-4.2$ psql testdb
+testdb=# alter user cent with password 'password1';
+ALTER ROLE
+testdb=# create table testTable ( no int,name text );
+CREATE TABLE
+testdb=# insert into testTable (no,name) values (1,'cent');
+INSERT 0 1
+testdb=# select * from testTable;
+ no | name 
+----+------
+  1 | cent
+(1 row)
+
+
+
