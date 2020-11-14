@@ -50,7 +50,7 @@ bash-4.2$
 ```
 postgres=# createdb zabbix
 ```
-Далее ставим сам zabbix
+- Далее ставим сам zabbix
 ```
 [root@server vagrant]# rpm -ivh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
 Retrieving http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
@@ -66,4 +66,44 @@ Loading mirror speeds from cached hostfile
  * updates: mirror.reconn.ru
 zabbix
 ...
+[root@server vagrant]# zcat /usr/share/doc/zabbix-server-pgsql-3.4.15/create.sql.gz | psql -U postgres zabbix
+```
+## Настройка базы данных для Zabbix сервера
+- Меняем zabbix_server.conf для использования созданной базы данных и запускаем службу.
+```
+[root@server vagrant]# vi /etc/zabbix/zabbix_server.conf
+DBHost=localhost
+DBName=zabbix
+DBUser=zabbix
+DBPassword=<пароль>
+[root@server vagrant]# systemctl start zabbix-server
+[root@server vagrant]# systemctl enable zabbix-server
+Created symlink from /etc/systemd/system/multi-user.target.wants/zabbix-server.service to /usr/lib/systemd/system/zabbix-server.service.
+```
+## Настройка PHP для Zabbix веб-интерфейса
+- Файл конфигурации Apache для Zabbix веб-интерфейса располагается в /etc/httpd/conf.d/zabbix.conf. Некоторые настройки PHP уже выполнены. Однако, необходимо раскомментировать “date.timezone” настройку и указать корректный для вас часовой пояс.
+```
+[root@server vagrant]# vi /etc/httpd/conf.d/zabbix.conf
+    <IfModule mod_php5.c>
+        php_value max_execution_time 300
+        php_value memory_limit 128M
+        php_value post_max_size 16M
+        php_value upload_max_filesize 2M
+        php_value max_input_time 300
+        php_value max_input_vars 10000
+        php_value always_populate_raw_post_data -1
+        php_value date.timezone Europe/Kaliningrad
+    </IfModule>
+```
+- Запускаем web сервер
+```
+[root@server vagrant]# systemctl start httpd
+[root@server vagrant]# systemctl enable httpd
+Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
+```
+## Настройка SELinux
+```
+[root@server vagrant]# setsebool -P httpd_can_connect_zabbix on
+[root@server vagrant]# setsebool -P httpd_can_network_connect_db on
+[root@server vagrant]# systemctl restart httpd
 ```
