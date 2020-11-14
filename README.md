@@ -108,7 +108,7 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 [root@server vagrant]# systemctl restart httpd
 ```
 ## Настройка Mamonsu
-Скачиваем mamonsu и настроиваем 
+- Скачиваем mamonsu и настроиваем 
 ```
 [root@server vagrant]# rpm -i https://repo.postgrespro.ru/mamonsu/keys/centos.rpm
 [root@server vagrant]# yum install mamonsu
@@ -137,7 +137,7 @@ Template for mamonsu has been saved as template.xml
 total 184
 -rw-r--r-- 1 root root 186828 ноя 14 21:06 template.xml
 ```
-Создаем пользователя и базу mamonsu, далее экспортируем agent.conf со след параметрами
+- Создаем пользователя и базу mamonsu, далее экспортируем agent.conf со след параметрами
 ```
 [postgres]
 enabled = True
