@@ -155,3 +155,16 @@ client = localhost
 address = 127.0.0.1
 port = 10051
 ```
+- 
+
+## Настройка резервного копирования с помощью - 
+- Установим barman
+```
+[root@server vagrant]# sudo yum -y install barman
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirror.axelname.ru
+ * epel: ftp.lysator.liu.se
+ * extras: mirror.logol.ru
+ * updates: centos-mirror.rbc.ru
+```
