@@ -39,9 +39,31 @@ Type "help" for help.
 postgres=# 
 ```
 - Меняем пароль
+```
 postgres=# \password postgres
 Enter new password: 
 Enter it again: 
 postgres=# \quit
 bash-4.2$ 
+```
+- Создаем базу данных zabbix
+```
+postgres=# createdb zabbix
+```
+Далее ставим сам zabbix
+```
+[root@server vagrant]# rpm -ivh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
+Retrieving http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
+warning: /var/tmp/rpm-tmp.YOYzGy: Header V4 RSA/SHA512 Signature, key ID a14fe591: NOKEY
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:zabbix-release-3.4-2.el7         ################################# [100%]
+[root@server vagrant]# yum install zabbix-server-pgsql zabbix-web-pgsql -y
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirror.sale-dedic.com
+ * extras: mirrors.datahouse.ru
+ * updates: mirror.reconn.ru
+zabbix
+...
 ```
