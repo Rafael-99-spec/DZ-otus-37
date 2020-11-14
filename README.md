@@ -6,7 +6,8 @@
 2. С помощью mamonsu подогнать конфиг сервера под ресурсы машины
 3. Развернуть Barman и настроить резервное копирование postgres
 ```
-## Практическая часть
+# Практическая часть
+## Установка zabbix сервера с POSTGRES SQL на Centos 7
 - Для начала установим postgresql на наш сервер
 ```
 [root@server vagrant]# rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat-repo-42.0-11.noarch.rpm
@@ -26,4 +27,21 @@ Initializing database ... OK
 [root@server vagrant]# systemctl enable postgresql-9.6
 Created symlink from /etc/systemd/system/multi-user.target.wants/postgresql-9.6.service to /usr/lib/systemd/system/postgresql-9.6.service.
 [root@server vagrant]# 
+```
+## НАСТРОЙКА POSTGRESQL CENTOS 7
+```
+[root@server vagrant]# su postgres
+bash-4.2$ psql
+could not change directory to "/home/vagrant": Permission denied
+psql (9.6.20)
+Type "help" for help.
+
+postgres=# 
+```
+- Меняем пароль
+postgres=# \password postgres
+Enter new password: 
+Enter it again: 
+postgres=# \quit
+bash-4.2$ 
 ```
