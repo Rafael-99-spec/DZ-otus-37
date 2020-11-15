@@ -107,6 +107,10 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 [root@server vagrant]# setsebool -P httpd_can_network_connect_db on
 [root@server vagrant]# systemctl restart httpd
 ```
+- Все созданные данные на сервере СУБД postgresql
+```
+
+```
 ## Настройка Mamonsu
 - Скачиваем mamonsu и настроиваем 
 ```
