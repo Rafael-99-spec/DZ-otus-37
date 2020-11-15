@@ -369,7 +369,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSYrEXSrxtdmK8BB2YnPiK9LKEGhmDqo0LrDfyCb2h
 [root@backup vagrant]# barman switch-xlog --force --archive server
 The WAL file 000000010000000000000003 has been closed on server 'server'
 Waiting for the WAL file 000000010000000000000003 from server 'server' (max: 50 seconds)
-Processing xlog segments from file archival for master
+Processing xlog segments from file archival for server
 	000000010000000000000003
 [root@backup vagrant]# barman check server
 Server server:
@@ -396,7 +396,7 @@ Server server:
 	continuous archiving: OK
 	archiver errors: OK
 [root@backup vagrant]# barman backup server
-Starting backup using postgres method for server master in /var/lib/barman/server/base/20200810T213713
+Starting backup using postgres method for server server in /var/lib/barman/server/base/20200810T213713
 Backup start at LSN: 0/4000060 (000000010000000000000004, 00000060)
 Starting backup copy via pg_basebackup for 20200810T213713
 Copy done (time: 2 seconds)
@@ -451,7 +451,7 @@ Server server:
 	Current data size: 30.4 MiB
 	PostgreSQL Data directory: /var/lib/pgsql/11/data
 	Current WAL segment: 000000010000000000000006
-	PostgreSQL 'archive_command' setting: barman-wal-archive backup master %p
+	PostgreSQL 'archive_command' setting: barman-wal-archive backup server %p
 	Last archived WAL: 000000010000000000000005.00000028.backup, at  Nov 12 21:37:16 2020
 	Failures of WAL archiver: 9 (000000010000000000000001 at Mon Nov 12 21:32:32 2020)
 	Server WAL archiving rate: 55.59/hour
@@ -462,23 +462,23 @@ Server server:
 	Last available backup: 20200810T213713
 	Minimum redundancy requirements: satisfied (1/0)
 [root@backup vagrant]# barman backup server
-Starting backup using postgres method for server server in /var/lib/barman/master/base/20200810T213807
+Starting backup using postgres method for server server in /var/lib/barman/server/base/20200810T213807
 Backup start at LSN: 0/60000C8 (000000010000000000000006, 000000C8)
 Starting backup copy via pg_basebackup for 20200810T213807
 Copy done (time: 3 seconds)
 Finalising the backup.
 Backup size: 30.1 MiB
 Backup end at LSN: 0/8000000 (000000010000000000000007, 00000000)
-Backup completed (start time: 2020-08-10 21:38:07.099352, elapsed time: 3 seconds)
-Processing xlog segments from streaming for master
+Backup completed (start time: 2020-11-12 21:38:07.099352, elapsed time: 3 seconds)
+Processing xlog segments from streaming for server
 	000000010000000000000006
-Processing xlog segments from file archival for master
+Processing xlog segments from file archival for server
 	000000010000000000000006
 	000000010000000000000007
 	000000010000000000000007.00000028.backup
 [root@backup vagrant]# barman replication-status server
 Status of streaming clients for server 'server':
-  Current LSN on master: 0/80000C8
+  Current LSN on server: 0/80000C8
   Number of streaming clients: 1
 
   1. Async WAL streamer
