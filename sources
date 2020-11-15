@@ -1,5 +1,10 @@
+# Zabbix_Postgresql
 https://www.server-world.info/en/note?os=CentOS_7&p=postgresql96&f=2
 https://www.server-world.info/en/note?os=CentOS_7&p=initial_conf&f=2
+https://www.kost.su/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-zabbix-4-%D1%81-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B9-postgresql-9-6/
 
 # Mamonsu_PostgreSQL
 https://assets.zabbix.com/files/events/conference_russia_2019/Popov_Alexandr-Mamonsu_PostgreSQL.pdf
+
+# Barman_PostgreSQL
+https://www.codeflow.site/ru/article/how-to-back-up-restore-and-migrate-postgresql-databases-with-barman-on-centos-7
