@@ -98,8 +98,7 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/zabbix-server.s
 - Запускаем web сервер
 ```
 [root@server vagrant]# systemctl start httpd
-[root@server vagrant]# systemctl enable httpd
-Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
+[root@server vagrant]# systemctl enable httpdCreated symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
 ```
 ## Настройка SELinux
 ```
@@ -133,6 +132,26 @@ postgres=# \l
 
 postgres=# 
 ```
+- Файл конфигурации предоставления доступа к БД - /var/lib/pgsql/9.6/data/pg_hba.conf
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host	all		all		192.168.11.0/24		password
+host    all             all             127.0.0.1/32            password
+# IPv6 local connections:
+local	all		barman					trust
+host	replication	barman		0.0.0.0/0		md5
+host    all             all             ::1/128                 ident
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+#local   replication     postgres                                peer
+#host    replication     postgres        127.0.0.1/32            ident
+#host    replication     postgres        ::1/128                 ident
+```
+
 ## Настройка Mamonsu
 - Скачиваем mamonsu и настроиваем 
 ```
