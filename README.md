@@ -206,11 +206,11 @@ port = 10051
 ```
 - После данного шага добавляем наш postgresql хост. И затем экспортируя шаблон импортируем его в zabbix, через веб управление мониторингом
 
-![image](https://github.com/Rafael-99-spec/DZ-otus-37//blob/master/import_templatexmp.PNG)
+![image](https://github.com/Rafael-99-spec/DZ-otus-37//blob/master/import_templatexmp.png)
 
 - После добавления zabbix сервера в hosts, добавим наш template который мы ранее импортировали в качестве ```*.xml``` файла.
 
-![image](https://github.com/Rafael-99-spec/DZ-otus-37//blob/master/123456789.PNG)
+![image](https://github.com/Rafael-99-spec/DZ-otus-37//blob/master/123456789.png)
 
 ## Настройка резервного копирования с помощью - 
 - Установим barman на второй вм(backup)
