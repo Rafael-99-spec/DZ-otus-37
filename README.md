@@ -28,7 +28,7 @@ Initializing database ... OK
 Created symlink from /etc/systemd/system/multi-user.target.wants/postgresql-9.6.service to /usr/lib/systemd/system/postgresql-9.6.service.
 [root@server vagrant]# 
 ```
-## НАСТРОЙКА POSTGRESQL CENTOS 7
+## Настройка PostgreSQL Centos 7
 ```
 [root@server vagrant]# su postgres
 bash-4.2$ psql
@@ -50,7 +50,7 @@ bash-4.2$
 ```
 postgres=# createdb zabbix
 ```
-- Далее ставим сам zabbix
+- Далее ставим сам zabbix (позднее был переустановлен пакет версии 4.2 вместо 3.4, в виду ограниченности по времени в плане сдачи ДЗ, не стал заново делать скрины с установки, надеюсь на ваше понимание)
 ```
 [root@server vagrant]# rpm -ivh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
 Retrieving http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm
