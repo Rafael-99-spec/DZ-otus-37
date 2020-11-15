@@ -109,7 +109,29 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 ```
 - Все созданные данные на сервере СУБД postgresql
 ```
+[root@server vagrant]# su postgres
+bash-4.2$ psql postgres
+could not change directory to "/home/vagrant"
+psql (9.2.24, server 9.6.20)
+WARNING: psql version 9.2, server version 9.6.
+         Some psql features might not work.
+Type "help" for help.
 
+postgres=# \l
+                                  List of databases
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+-----------+----------+----------+-------------+-------------+-----------------------
+ mamonsu   | mamonsu  | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ mytestdb  | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ postgres  | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ template0 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ zabbix    | zabbix   | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+(6 rows)
+
+postgres=# 
 ```
 ## Настройка Mamonsu
 - Скачиваем mamonsu и настроиваем 
