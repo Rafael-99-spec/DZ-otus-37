@@ -1,0 +1,68 @@
+#log paths
+__/var/lib/pgsql/9.6/data/pg_log/
+
+# Change owner of user 
+$ ALTER DATABASE name OWNER TO new_owner;
+
+#connect to Postgresql
+$ su - postgres
+$ psql
+
+# get into DB
+$ \connect DBNAME
+
+# list all databases
+$ \l
+
+# list all users
+$ \du
+
+# list commands' types
+$ \?
+
+# Set user permissions
+$ ALTER USER zabbix WITH SUPERUSER;
+ALTER ROLE 
+
+
+# Change The Password of a PostgreSQL User
+$ ALTER ROLE zabbix WITH PASSWORD 'zabbix'; 
+ALTER ROLE
+
+# Create schema with assigning of user
+$ CREATE SCHEMA zabbix AUTHORIZATION zabbix
+
+# Create table for DB
+$CREATE TABLE IF NOT EXISTS cafe (
+  id SERIAL PRIMARY KEY,     
+  category cat_enum NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  price NUMERIC(5,2) NOT NULL,  
+  last_update DATE              
+);
+
+# Run database 
+$ psql -U USERNAME -d DBNAME
+
+# Create database
+$ CREATE DATABASE zabbix WITH OWNER zabbix;
+
+# Grant privileges on db to user
+$ GRANT ALL PRIVILEGES ON DATABASE zabbix TO zabbix
+
+
+# connect to the DB this way, if can't across - psql
+$ sudo -i -u postgres psql
+$ postgres=#psql zabbix
+$ zabbix=#
+
+# connect to Postgresql accross specified user
+$ psql --username=USERNAME	
+
+# Update user aliases
+
+# To see where the data directory is, use this query.
+$ show data_directory;
+
+# To see all the run-time parameters, use
+$ show all;
