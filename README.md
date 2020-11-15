@@ -7,6 +7,9 @@
 3. Развернуть Barman и настроить резервное копирование postgres
 ```
 # Практическая часть
+
+Для развертывания и настройки использовался стенд из вышеуказанного Vagrantfile.
+
 ## Установка zabbix сервера с POSTGRES SQL на Centos 7
 - Для начала установим postgresql на наш сервер
 ```
@@ -98,7 +101,8 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/zabbix-server.s
 - Запускаем web сервер
 ```
 [root@server vagrant]# systemctl start httpd
-[root@server vagrant]# systemctl enable httpdCreated symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
+[root@server vagrant]# systemctl enable httpd
+Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
 ```
 ## Настройка SELinux
 ```
