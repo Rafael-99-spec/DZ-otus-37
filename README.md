@@ -242,3 +242,124 @@ Qe4zaRYfTKkr3vuWlILZyBF77I8uxL8uuTFt4UBZm6bQialnxv8=
 ```
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwJU7H47DfDdU1JO8lPklJ7P/fgMRyyqmSytBjqLaugV5NKA3xL2k79NFPmh1tP63jpSWQve8EJqgRHNUIs00yTQvYQ+UcX61VhMl8jAK6r1qAZ457x0ofhfNeIQ+mU7CmyXLG1YLZeu1mlWEa5dAfPcwjxsgZmqpbSCR4fKQ3F4CeEaJFVYejabATiqCzfzul+uKjDYxXLNk6UUOMrY0G8M7Kalh+8YDqJ3U7199Is39D9/aL98NfRydBOAdgJ1PrcK+4t3TA5K7/yp1cRrGnTMHPbj77BHySVuUs5HVXwjM2n6AuX+82lqJMv0blwK+lXm3/WzJwcRz7EW29Ajbp barman@backup
 ```
+- На ВМ server(Сервер zabbix+postgresql) отредактируем след файлы
+/var/lib/pgsql/9.6/data/pg_hba.conf
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            ident
+host    all            barman            192.168.11.0/24          md5
+host    replication    barman_streaming_user            192.168.11.0/24          md5
+host    all             all             192.168.11.0/24         trust
+host    replication     all             192.168.11.0/24         trust
+```
+/var/lib/pgsql/9.6/data/postgresql.conf
+```
+# -----------------------------
+# PostgreSQL configuration file
+# -----------------------------
+#
+
+listen_addresses = '*'
+max_connections = 100
+shared_buffers = 128MB
+dynamic_shared_memory_type = posix
+
+#------------------------------------------------------------------------------
+# WRITE-AHEAD LOG
+#------------------------------------------------------------------------------
+
+wal_level = 'replica'    	# minimal, replica, or logical
+
+max_wal_size = 1GB
+min_wal_size = 80MB
+
+# - Archiving -
+
+archive_mode = on		# enables archiving; off, on, or always
+archive_command = 'barman-wal-archive backup master %p'
+
+
+#------------------------------------------------------------------------------
+# REPLICATION
+#------------------------------------------------------------------------------
+
+# - Sending Servers -
+
+# Set these on the master and on any standby that will send replication data.
+
+max_wal_senders = 10		# max number of walsender processes
+wal_keep_segments = 32		# in logfile segments; 0 disables
+max_replication_slots = 10	# max number of replication slots
+
+# - Standby Servers -
+
+# These settings are ignored on a master server.
+
+hot_standby = on			# "off" disallows queries during recovery
+
+# REPORTING AND LOGGING
+
+log_destination = 'stderr'
+logging_collector = on
+log_directory = 'log'
+log_filename = 'postgresql-%a.log'
+log_truncate_on_rotation = on
+log_rotation_age = 1d
+log_rotation_size = 0
+log_line_prefix = '%m [%p] '
+log_timezone = 'UTC'
+
+# Locale
+
+datestyle = 'iso, mdy'
+timezone = 'UTC'
+lc_messages = 'en_US.UTF-8'
+lc_monetary = 'en_US.UTF-8'
+lc_numeric = 'en_US.UTF-8'
+lc_time = 'en_US.UTF-8'
+default_text_search_config = 'pg_catalog.english'
+```
+/var/lib/pgsql/.ssh/config
+```
+Host backup
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+```
+/var/lib/pgsql/.ssh/ida_rsa
+```
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEA0mKxF0q8bXZivAQdmJz4ivSyhBoZg6qNC6w38gm9oQZaf6vZ
+6BHMDxcU6q595kWYmAPRrsr/aZUsCw2t7fAtuPdR6UMNUZzb15xEhrE8+rm4PjlE
+nweMNfUWZhiBMBvdxzcM5b2rCQSMKA2QiVp6FIz+A7pwFFjsh9Ux7W+htSLkf2nK
+PzoO/wJYLm6dPpqq94yugfxc/MZz8hK72+SP+Hk1++SotLxYB5L9iRV43T1t0rxL
+5VfazcfdJXOY3TpbfbnPy4d3cZAhTthMGRgQORDVkBEVplu+VBpXQHJKqcvNlW43
+BjyUlIkHNtTNaVEPWWpFZoWlmxYsWg2sJfObuwIDAQABAoIBAHrVlH/86rcef9c2
+r/EC9TpsVC487tipI2DFVITEmysBAqW4OKn+eh31ZAkBiBCCYe2fjTV44FdM+UIa
+4oohyRBNlk2TEJut8c2ZN4lMwkXBWYk69o3DYmG+jy1c8VCddIdz5NveOZYySYK5
+KMKJSO3mxAh5OicnJDLKjzQKEWgnwAj0fZ3DHlrzU/WzhO/N4Mn1+vWloRug+oGU
+QsXRMim+7RLdURtGUr+UO4Yq2ri5/Ql57Sg3ie60QBVjQuLRhDsFhdkijaWjMJpP
+uP5cFmhrmdu/LyxW9L8ukpvof79FLdIi+Bih84WF02QMsKbJuNWFo4u5UmagqDfg
+SWonDEECgYEA8Cm43sj1S4cMe7yM8+IHJ9PgBfwN7SwtkrG2Zv6Bi252iUJ9AzUn
+k+bF6cR0nD9bcJR9tGKP9pMySfiVRkXncmVYOVIPF6znbEJ1LgpHEw8MiE6Ve+mj
+Pd4UmYPSJoXSEEdc5SlzojfI85QYrkrDSwoly1NFqEZ419MvAfC08wUCgYEA4EJJ
+GEyRwWTlHaD8MPdmLKW+SbW5MJiLdUdTr2lgSccuCUDa9jT5WU962GUnhPnNuBGB
+nJTJYDMabUUlPRZ2/cc6kFQOFfV3XvJfdKu2JF3Cj3fNNBLZ//cLPfYI6h+Nv+6h
+jI2Or59uSaCzT/ZlTlmpQNmgc0uaLhgFPwnxD78CgYBtp28ccX7mPEQr3vwwgnwn
+6Cp6MQqexrQMLY4N2piFdCs1IqF3rHZkplKpGKTxjlAOyA3ZJcN7ntuwQIrPqi0x
+4yn0Cg6QDccge/uKyPCIuC9NsSu5hwScw+B9810pb6JpAlxc2Z9NatEavfzC36np
+gjmda2j7mymjyW3GIgRMjQKBgDG8oceA2+a/gM0UcjpN9Fw8mjpw0lTD0FI/coD5
+5wAV69DjkGyAjTjQltc9gAlO+eA0CcH3gb4TN246oqqsu9FHCWcPLVyTZ1koeiE/
+IBNqtAbrtBgzgiPx341rbsi2HNMPksbAcn/i5SvxNzOp2wgIfLBEVACeKODGNQup
+IcyzAoGBAIlMHi8ISnkwE75vvI+B3ZuGAZR9OpCt4Tbc7AZs2a8z7YVu7SrZrkrB
+tQjqyIxXdWxu0cfrTuL/zfEyvsfr26joNKu1h+1oX1kbvhu253/OYjzYWGgihpBK
+FPWaAJa01W38xJoQPLJC7kBE/fo3VLOWDgjH34oahnK4gWfx3HW1
+-----END RSA PRIVATE KEY-----
+```
+/var/lib/pgsql/.ssh/id_rsa.pub
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSYrEXSrxtdmK8BB2YnPiK9LKEGhmDqo0LrDfyCb2hBlp/q9noEcwPFxTqrn3mRZiYA9Guyv9plSwLDa3t8C2491HpQw1RnNvXnESGsTz6ubg+OUSfB4w19RZmGIEwG93HNwzlvasJBIwoDZCJWnoUjP4DunAUWOyH1THtb6G1IuR/aco/Og7/Algubp0+mqr3jK6B/Fz8xnPyErvb5I/4eTX75Ki0vFgHkv2JFXjdPW3SvEvlV9rNx90lc5jdOlt9uc/Lh3dxkCFO2EwZGBA5ENWQERWmW75UGldAckqpy82VbjcGPJSUiQc21M1pUQ9ZakVmhaWbFixaDawl85u7 postgres@server
+```
